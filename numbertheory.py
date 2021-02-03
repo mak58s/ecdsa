@@ -8,7 +8,7 @@
 # Revision history:
 #   2008.11.14: Use pow(base, exponent, modulus) for modular_exp.
 #               Make gcd and lcm accept arbitrarly many arguments.
-
+import numba
 from __future__ import division
 
 from six import integer_types, PY2
