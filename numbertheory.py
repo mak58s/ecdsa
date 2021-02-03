@@ -49,7 +49,7 @@ class SquareRootError(Error):
 class NegativeExponentError(Error):
     pass
 
-
+@jit
 def modular_exp(base, exponent, modulus):  # pragma: no cover
     """Raise base to exponent, reducing by modulus"""
     # deprecated in 0.14
@@ -64,7 +64,7 @@ def modular_exp(base, exponent, modulus):  # pragma: no cover
         )
     return pow(base, exponent, modulus)
 
-
+@jit
 def polynomial_reduce_mod(poly, polymod, p):
     """Reduce poly by polymod, integer arithmetic modulo p.
 
@@ -87,7 +87,7 @@ def polynomial_reduce_mod(poly, polymod, p):
 
     return poly
 
-
+@jit
 def polynomial_multiply_mod(m1, m2, polymod, p):
     """Polynomial multiplication modulo a polynomial over ints mod p.
 
@@ -111,7 +111,7 @@ def polynomial_multiply_mod(m1, m2, polymod, p):
 
     return polynomial_reduce_mod(prod, polymod, p)
 
-
+@jit
 def polynomial_exp_mod(base, exponent, polymod, p):
     """Polynomial exponentiation modulo a polynomial over ints mod p.
 
@@ -143,7 +143,7 @@ def polynomial_exp_mod(base, exponent, polymod, p):
 
     return s
 
-
+@jit
 def jacobi(a, n):
     """Jacobi symbol"""
 
@@ -173,7 +173,7 @@ def jacobi(a, n):
         s = -s
     return s * jacobi(n % a1, a1)
 
-
+@jit
 def square_root_mod_prime(a, p):
     """Modular square root of a, mod p, p prime."""
 
@@ -220,7 +220,7 @@ def square_root_mod_prime(a, p):
 
 
 if GMPY2:
-
+    @jit
     def inverse_mod(a, m):
         """Inverse of a mod m."""
         if a == 0:
@@ -229,7 +229,7 @@ if GMPY2:
 
 
 elif GMPY:
-
+    @jit
     def inverse_mod(a, m):
         """Inverse of a mod m."""
         # while libgmp likely does support inverses modulo, it is accessible
@@ -251,7 +251,7 @@ elif GMPY:
 
 
 else:
-
+    @jit
     def inverse_mod(a, m):
         """Inverse of a mod m."""
 
@@ -270,14 +270,14 @@ else:
 try:
     gcd2 = math.gcd
 except AttributeError:
-
+    @jit
     def gcd2(a, b):
         """Greatest common divisor using Euclid's algorithm."""
         while a:
             a, b = b % a, a
         return b
 
-
+@jit
 def gcd(*a):
     """Greatest common divisor.
 
@@ -291,13 +291,13 @@ def gcd(*a):
         return reduce(gcd2, a[0])
     return a[0]
 
-
+@jit
 def lcm2(a, b):
     """Least common multiple of two integers."""
 
     return (a * b) // gcd(a, b)
 
-
+@jit
 def lcm(*a):
     """Least common multiple.
 
@@ -311,7 +311,7 @@ def lcm(*a):
         return reduce(lcm2, a[0])
     return a[0]
 
-
+@jit
 def factorization(n):
     """Decompose n into a list of (prime,exponent) pairs."""
 
@@ -367,7 +367,7 @@ def factorization(n):
 
     return result
 
-
+@jit
 def phi(n):  # pragma: no cover
     """Return the Euler totient function of n."""
     # deprecated in 0.14
@@ -393,7 +393,7 @@ def phi(n):  # pragma: no cover
             result = result * (f[0] - 1)
     return result
 
-
+@jit
 def carmichael(n):  # pragma: no cover
     """Return Carmichael function of n.
 
@@ -410,7 +410,7 @@ def carmichael(n):  # pragma: no cover
 
     return carmichael_of_factorized(factorization(n))
 
-
+@jit
 def carmichael_of_factorized(f_list):  # pragma: no cover
     """Return the Carmichael function of a number that is
     represented as a list of (prime,exponent) pairs.
@@ -432,7 +432,7 @@ def carmichael_of_factorized(f_list):  # pragma: no cover
 
     return result
 
-
+@jit
 def carmichael_of_ppower(pp):  # pragma: no cover
     """Carmichael function of the given power of the given prime."""
     # deprecated in 0.14
@@ -449,7 +449,7 @@ def carmichael_of_ppower(pp):  # pragma: no cover
     else:
         return (p - 1) * p ** (a - 1)
 
-
+@jit
 def order_mod(x, m):  # pragma: no cover
     """Return the order of x in the multiplicative group mod m."""
     # deprecated in 0.14
@@ -475,7 +475,7 @@ def order_mod(x, m):  # pragma: no cover
         result = result + 1
     return result
 
-
+@jit
 def largest_factor_relatively_prime(a, b):  # pragma: no cover
     """Return the largest factor of a relatively prime to b."""
     # deprecated in 0.14
@@ -498,7 +498,7 @@ def largest_factor_relatively_prime(a, b):  # pragma: no cover
             a = q
     return a
 
-
+@jit
 def kinda_order_mod(x, m):  # pragma: no cover
     """Return the order of x in the multiplicative group mod m',
     where m' is the largest factor of m relatively prime to x.
@@ -513,7 +513,7 @@ def kinda_order_mod(x, m):  # pragma: no cover
 
     return order_mod(x, largest_factor_relatively_prime(m, x))
 
-
+@jit
 def is_prime(n):
     """Return True if x is prime, False otherwise.
 
@@ -591,7 +591,7 @@ def is_prime(n):
                 return False
     return True
 
-
+@jit
 def next_prime(starting_value):
     """Return the smallest prime larger than the starting value."""
 
