@@ -34,7 +34,7 @@ except ImportError:
 
 import math
 import warnings
-import numba
+from numba import jit
 
 class Error(Exception):
     """Base class for exceptions in this module."""
